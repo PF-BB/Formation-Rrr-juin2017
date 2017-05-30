@@ -49,8 +49,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Rrr - Formation R 2017'
-copyright = u'2016, ICONICS, Justine Guégan '
+project = u'Rrr - Formation R juin 2017'
+copyright = u'2017, ICONICS, Justine Guégan '
 author = u'Justine Guégan '
 
 # The version info for the project you're documenting, acts as replacement for

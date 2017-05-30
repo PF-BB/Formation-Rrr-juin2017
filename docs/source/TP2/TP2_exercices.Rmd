@@ -1,7 +1,7 @@
 ---
 title: "TP02 - Découverte de R - Exercices"
 author: "Justine Guégan - ICONICS"
-date: "9 mars 2017"
+date: "1 juin 2017"
 output: pdf_document
 ---
 

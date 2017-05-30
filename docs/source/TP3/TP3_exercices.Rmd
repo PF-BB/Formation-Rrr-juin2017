@@ -1,7 +1,7 @@
 ---
 title: "TP03 - Découverte de R - Exercices"
 author: "Justine Guégan - ICONICS"
-date: "17 mars 2017"
+date: "2 juin 2017"
 output: pdf_document
 ---
 

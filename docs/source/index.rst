@@ -14,13 +14,14 @@ Jour 3 (2 juin 2017 9h30-12h30) 	Salle 1.005
 
 Programme : 
 
-=========	======================================================================
-TP		Description
-=========	======================================================================
-Jour 1		Commandes de base en R, Charger et sauvegarder des données, graphiques
-Jour 2 		Approfondissement des notions de base, des graphiques. Statistiques simples
-Jour3 		Lecture fichier, filtres tableaux, cartes de chaleur
-==========	======================================================================
+=========  ======================================================================
+TP	   Description
+=========  ======================================================================
+Jour 1	   Commandes de base en R, Charger et sauvegarder des données, graphiques
+Jour 2 	   Approfondissement des notions de base, des graphiques. Statistiques simples
+Jour 3 	   Lecture fichier, filtres tableaux, cartes de chaleur
+=========  ======================================================================
+
 
 Table des matières
 ^^^^^^^^^^^^^^^^^^ 

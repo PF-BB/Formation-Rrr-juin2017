@@ -1,6 +1,6 @@
 library(pathview)
-genes = read.table("myGenes.csv", sep=";", header=TRUE, stringsAsFactors = FALSE)
-rownames(genes) = genes[,2]
+genesTable = read.table("exo1/myGenes.csv", sep=";", header=TRUE)
+genes = as.vector(genesTable[,2])
 pathwayID = "hsa04012"
 geneIDTYPE = "SYMBOL"
-pathview(genes[,2], pathway.id = pathwayID, gene.idtype = geneIDTYPE,plot.col.key= FALSE)
+pathview(genes, pathway.id = pathwayID, gene.idtype = geneIDTYPE,plot.col.key= FALSE)

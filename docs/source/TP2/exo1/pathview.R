@@ -1,8 +1,19 @@
+# Chargement de la library pathview
 library(pathview)
-genes = read.table("genes.txt", sep="\t", header=FALSE)
 
-#il faut que les noms de lignes correspondent aux noms des genes pour que la fonction pathview() fonctionne.
-rownames(genes) = as.vector(genes[,1])
+# Lecture du tableau
+genesTable = read.table("genes.txt", sep="\t", header=TRUE)
+
+# extraire uniquement les noms de genes
+genes = genes[,1]
+
+# vérifier la classe de l'objet gene
+class(genes)
+
+# la doc de la fonction pathview indique que l'objet genes doit etre un VECTEUR
+genes = as.vector(genes)
+
+# Choisir son pathway et le type d'annotation de gene
 pathwayID = "hsa04110"
 geneIDTYPE = "SYMBOL"
 

@@ -11,6 +11,8 @@ print(summary(iris))
 
 #Graphics
 library(ggplot2)
+
+# Premier graphique
 p2 = ggplot(iris, aes(x=Species, y=Sepal.Width)) +
   geom_point(aes(fill=Species), size=5, shape=21, colour="grey20",
              position=position_jitter(width=0.2, height=0.1)) +
@@ -25,7 +27,7 @@ print(res1)
 res2 = t.test(iris$Sepal.Width[which(iris$Species == "versicolor")], iris$Sepal.Width[which(iris$Species == "virginica")])
 print(res2)
 
-#New graph
+# Graphique final
 df1 <- data.frame(a = c(1,1,2,2), b = c(4.5, 4.6,4.6,4.5))
 df2 <- data.frame(a = c(2,2,3,3), b = c(3.9, 4,4,3.9))
 p3 = p2 + geom_line(data = df1, aes(x = a, y = b)) + annotate("text", x = 1.5, y = 4.65, label = "***", size = 8) +

@@ -24,21 +24,26 @@ source('http://www.bioconductor.org/biocLite.R')
 biocLite("pathview")
 ```
 
-*NB : Ne mettez pas à jour les packages si on vous le propose car cela peut être long*
+*NB : Ne mettez pas à jour les packages si on vous le propose car cela peut être long*  
+*Redémarrez RStudio si nécessaire*
 
 2. Exécuter le code R `pathview.R` ligne à ligne et regarder le résultat.
-3. Adapter ce code pour qu'il fonctionne sur le fichier d'entrée `myGenes.csv`, sur le pathway `hsa04012`. Pensez à : 
+3. Adapter ce code pour qu'il fonctionne sur le fichier d'entrée `myGenes.csv`, sur le pathway `hsa04012`.  
+Pensez à : 
    
-    * Lire __correctement__ le fichier `myGenes.csv`. Ajoutez l'argument `stringsAsFactor = FALSE` dans `read.table()`.
-    * Imprimer le tableau lu, vérifier sa classe ... 
+    * Lire __correctement__ le fichier `myGenes.csv`. (quel est le séparateur de colonne ?)
+    * Imprimer le tableau lu, vérifier sa classe, ses dimensions ... 
 
-```{r exo1, echo=TRUE, eval=TRUE, warning=FALSE, message=FALSE}
+```{r exo1, echo=TRUE, eval=FALSE, warning=FALSE, message=FALSE}
 library(pathview)
-genes = read.table("exo1/myGenes.csv", sep=";", header=TRUE, stringsAsFactors = FALSE)
-rownames(genes) = genes[,2]
+genesTable = read.table("exo1/myGenes.csv", sep=";", header=TRUE)
+print(genesTable)
+class(genesTable)
+dim(genesTable)
+genes = as.vector(genesTable[,2])
 pathwayID = "hsa04012"
 geneIDTYPE = "SYMBOL"
-pathview(genes[,2], pathway.id = pathwayID, gene.idtype = geneIDTYPE,plot.col.key= FALSE)
+pathview(genes, pathway.id = pathwayID, gene.idtype = geneIDTYPE,plot.col.key= FALSE)
 ```
 
 
@@ -55,7 +60,7 @@ pathview(genes[,2], pathway.id = pathwayID, gene.idtype = geneIDTYPE,plot.col.ke
 
 Vous avez trouvé sur internet une figure que vous trouvez très intéressante et que vous aimeriez reproduire pour vos propres données. 
 
-```{r echo=FALSE, warning=FALSE, message=FALSE}
+```{r echo=TRUE, warning=FALSE, message=FALSE}
 data(iris)
 library(ggplot2)
 p2 = ggplot(iris, aes(x=Species, y=Sepal.Width)) +
@@ -71,7 +76,7 @@ p2 + geom_line(data = df1, aes(x = a, y = b)) + annotate("text", x = 1.5, y = 4.
 
 Coup de chance ! vous trouvez aussi le code R qui permet de générer cette figure ! `iris.R`
 
-1. Essayez de comprendre ce que fait le code du script `iris.R`, notamment les lignes suivantes (n'y passez pas trop de temps non plus, on voit tout en détail par la suite) : 
+**1.** Essayez de comprendre ce que fait le code du script `iris.R`, juste en lisant les lignes de code, notamment les lignes suivantes (n'y passez pas trop de temps non plus, on voit tout en détail par la suite) : 
 
 
 > * `library(ggplot2)`
@@ -82,21 +87,21 @@ Coup de chance ! vous trouvez aussi le code R qui permet de générer cette figu
 >    `dev.off()`   
 
 
-2. Placez-vous à l'endroit où vous avez enregistré le script `iris.R` : Session --> Set working directory --> Choose  directory. 
+**2.** Placez-vous à l'endroit où vous avez enregistré le script `iris.R` : Session --> Set working directory --> Choose  directory. 
 
 Exécutez à présent la ligne de commande suivante : 
 
 ```
-source(iris.R)
+source("iris.R")
 ```
 
 Que s'est-il passé ? 
 
-3. Vous trouvez la figure finale générée très intéressante et vous vous dites que vous pourriez vous en inspirer pour représenter vos données d'expression de gènes. Justement, vous avez screené votre géne fétiche appelé *g1* chez 100 individus classés en 3 groupes : contrôles, pré-symptomatiques et symptomatiques. De plus, le t-test réalisé pourrait apporter une valeur statistique à vote étude. 
+**3.** Vous trouvez la figure finale générée très intéressante et vous vous dites que vous pourriez vous en inspirer pour représenter vos données d'expression de gènes. Justement, vous avez screené votre géne fétiche appelé *g1* chez 100 individus classés en 3 groupes : contrôles, pré-symptomatiques et symptomatiques. De plus, le t-test réalisé pourrait apporter une valeur statistique à vote étude. 
 
 L'idée est donc de produire la figure suivante, en indiquant la pvalue issue du t-test entre les contrôles et les pré-symptomatiques.
 
-```{r echo = TRUE, message=FALSE}
+```{r echo = TRUE, message=FALSE, eval=TRUE}
 library(ggplot2)
 data = read.table("exo2/gene1.txt", sep="\t", header=TRUE)
 p2 = ggplot(data, aes(x=group, y=g1)) +
@@ -111,15 +116,15 @@ annotate("text", x = 1.5, y = 9.2,
 label = paste("pvalue = ", round(res1$p.value,2), sep=""), size = 2)
 ```
 
-3.1 Lire le fichier `gene1.txt` (vous pouvez déjà le regarder sous excel ou notepad etc ... pour voir ce qu'il contient)
+**3.1** Lire le fichier `gene1.txt` (vous pouvez déjà le regarder sous excel ou notepad etc ... pour voir ce qu'il contient)
 
-3.2 Comme pour le jeu de données `iris`, lancez quelques fonctions qui vous permettent d'avoir des infos sur le jeu de données (échantillonage,  stats de base, dimensions du tableau ...)
+**3.2** Comme pour le jeu de données `iris`, lancez quelques fonctions qui vous permettent d'avoir des infos sur le jeu de données ( aperçu des données, stats de base, dimensions du tableau ...)
 
-3.3 Adaptez les lignes de commandes qui créent le premier graphique. Essayez de diminuer la taille des points, adaptez le titre ...
+**3.3** Adaptez les lignes de commandes de `iris.R` qui créent le premier graphique. Essayez de diminuer la taille des points, adaptez le titre ...
 
-3.4 Lancez un t-test entre les contrôles et les pré-symptomatiques.
+**3.4** Lancez un t-test entre les contrôles et les pré-symptomatiques.
 
-3.5 Adaptez les lignes de commandes qui créent le graphique final.
+**3.5** Adaptez les lignes de commandes de `iris.R` qui créent le graphique final.
 
 
 \newpage
@@ -128,52 +133,54 @@ label = paste("pvalue = ", round(res1$p.value,2), sep=""), size = 2)
 
 > __Cet exercice a pour but de vous faire:__
 
-> * __lire/écrire des fichiers (excel)__
+> * __lire/écrire des fichiers__
 > * __filtrer des tableaux__
 > * __faire des représentations graphiques de base__
 
-Le fichier `VariantsTable.xlsx` est un tableau contenant une liste de vraiations génomiques (snps/indels) issues d'une capture de gènes faite par séquençage à haut débit, et ce, pour 4 patients : Sample1, Sample2, Sample3 et Sample4. Cette liste de variants est annotée avec différentes base de données représentant les différentes colonnes du fichier.
+Le fichier `VariantsTable.xlsx` (ou `VariantsTable.csv`) est un tableau contenant une liste de variations génomiques (snps/indels) issues d'une capture de gènes faite par séquençage à haut débit, et ce, pour 4 patients : Sample1, Sample2, Sample3 et Sample4. Cette liste de variants est annotée avec différentes base de données représentant les différentes colonnes du fichier. Regardez ce fichier sous Excel pour commencer.
 
-**1.** Chargez le package `gdata`
+**1.** Lire le fichier `VariantsTable.csv`
 
-**2.** Lire le fichier `VariantsTable.xlsx` (ceci peut être long)
+**2.** Comme d'habitude, regarder la taille du tableau, sa classe etc ...
 
 **3.** Combien y-at-il de variants par échantillon ? Faites une représentation en bâtons (`barplot()`) du nombre de variants par échantillon. Précisez un titre et colorez les barres en rouge et leur trait en bleu.
 
 ```{r exo3, echo=TRUE, eval=TRUE, warning=FALSE, message=FALSE}
-library(gdata)
-data = read.xls("exo3/VariantsTable.xlsx")
+data = read.table("exo3/VariantsTable.csv", sep="\t", header=TRUE)
 dim(data)
 head(data)
 table(data$SampleID)
 barplot(table(data$SampleID), main="Nombre de variants par échantillon", col="red",border = "blue")
 ``` 
 
-**4.** On souhaite à présent représenter en barplot le nombre de variants par chromosome, par échantillon, de telle sorte que le graphique généré ressemble à celui ci-dessous :  
+\newpage
 
-```{r exo3Q4,echo=TRUE, warning=FALSE, message=FALSE}
+**4.** On souhaite à présent représenter en barplot le nombre de variants par chromosome, par échantillon, de telle sorte que le graphique généré ressemble à celui ci-dessous (les sous-questions vous guident pour générer la figure):  
+
+```{r exo3Q4,echo=TRUE, warning=FALSE, message=FALSE,eval=TRUE}
 library(RColorBrewer)
 data = read.table("exo3/VariantsTable.csv", sep="\t", header=TRUE)
-tabChrSample = with(data, table(SampleID, Chrom))
+tabChrSample = table(data$SampleID, data$Chrom)
 barplot(tabChrSample, beside=TRUE, col=brewer.pal(4,"Paired"),legend.text = TRUE,cex.names = 0.8,las=2)
 ```
 
-   **4.1** Pour cela, vous pouvez combiner la fonction `with()` avec la fonction `table()`. Regardez l'aide de la fonction `table`, et inspirez-vous des lignes d'exemple. L'idée est d'obtenir un tableau de ce type :
+   **4.1** Pour cela, regardez l'aide de la fonction `table`, et inspirez-vous des lignes d'exemple. L'idée est d'obtenir un tableau de ce type :
 
-\newpage
-
-```{r, echo=FALSE}
+```{r, echo=TRUE,eval=TRUE}
 print(tabChrSample[,1:6])
 ```
+   
    **4.2** Puis créer le graphique toujours à l'aide de la fonction `barplot`. Regarder l'aide de cette fonction, notament les arguments, afin : 
    
 > * de mettre les barres les unes à côté des autres,
 > * d'ajouter une légende
     
-  **4.3** Les noms de tous les chromosomes ne sont pas présents ? C'est normal car la police est trop grande : diminuer la taille de la police avec l'argument `cex.names`. Si vous voulez tourner de 90° le noms des labels en x, utilisez l'argument `las=2`.
+  **4.3** Les noms de tous les chromosomes ne sont pas présents ? C'est normal car la police est trop grande : diminuer la taille de la police avec l'argument `cex.names` (par défait, `cex.names=1`). Si vous voulez tourner de 90° le noms des labels en x, utilisez l'argument `las=2`.
   
   **4.4** Vous voulez de la couleur plutôt que des nuances de gris ? Le package `RColorBrewer` est un package qui contient des palettes de couleurs. Pour l'utiliser, chargez le package, puis tapez `display.brewer.all()`. Ainsi vous visualisez toutes les palettes de couleur du package. Choisissez le nom de l'une d'entre elles et, dans les arguments de `barplot`, ajoutez :   
   `col=brewer.pal(<nombreDeCouleursQueVousVoulez>,"<NomDeLaPalette>")`.
+
+\newpage
 
   **5.** On veut à présent travailler sur l'impact fonctionnel des variants.
   
@@ -216,7 +223,7 @@ legend(0.9,0.9, legend=names(exonicsort), fill =brewer.pal(7, "Set1"), cex=0.8)
   
   **6.5** Ecrire ce nouveau tableau sur votre ordinateur grâce à la fonction `write.table`.
   
-```{r exo3Q6, echo=TRUE, eval=FALSE, message=FALSE}
+```{r exo3Q6, echo=TRUE, eval=TRUE, message=FALSE}
 vec1 = which(data$ExonicFunc.refGene == "nonsynonymous SNV" | data$ExonicFunc.refGene == "stopgain" | data$ExonicFunc.refGene == "stoploss")
 vec2 = which(data$CADD_phred > 12.37)
 vec3 = intersect(vec1, vec2)
@@ -254,11 +261,11 @@ Dans cet exercice, on cherche à intersecter 2 fichiers contenant des positions 
     
     3.2 En vous aidant du script `findOverlaps.R` et de l'aide du package GenomicRanges, créer 2 tableaux tab1 et tab2 contenant uniquement les snp dont la pvalue (*ie.* score) est inférieure à 0.01 et 0.005 respectivement ET qui overlappent un transcrit.
     
-```{r exo4, echo=TRUE, eval=FALSE, warning=FALSE, message=FALSE}
+```{r exo4, echo=TRUE, eval=TRUE, warning=FALSE, message=FALSE}
 library("GenomicRanges")
 library(plyr)
-data = read.table("exo3/transcriptsTable.txt", sep="\t", header=FALSE)
-snp = read.table("exo3/snpsTable.txt", sep="\t", header=TRUE)
+data = read.table("exo4/transcriptsTable.txt", sep="\t", header=FALSE)
+snp = read.table("exo4/snpsTable.txt", sep="\t", header=TRUE)
 
 snp1 = snp[which(snp$score < 0.01),]
 snp2 = snp[which(snp$score < 0.005),]

@@ -12,74 +12,38 @@ La notation entre `<>` n'est pas une notation R, c'est juste pour vous indiquer 
 
 Je vous propose de créer un document Rmarkdown pour ce TP.
 
-## Exercice 1 : Résumer et visualiser une liste de variants
+## Exercice 1 : Résumer une liste de variants
 
 > __Cet exercice a pour but de vous faire:__
 
-> * __lire/écrire des fichiers (excel)__
+> * __lire/écrire des fichiers__
 > * __filtrer des tableaux__
-> * __faire des représentations graphiques de base__
+
 
 Le fichier `VariantsTable.xlsx` est un tableau contenant une liste de vraiations génomiques (snps/indels) issues d'une capture de gènes faite par séquençage à haut débit, et ce, pour 4 patients : Sample1, Sample2, Sample3 et Sample4. Cette liste de variants est annotée avec différentes base de données représentant les différentes colonnes du fichier.
 
   **1.** Lire le fichier `VariantsTable.csv` (séparateur tabulation `\t`)
 
-  **2.** On veut travailler sur l'impact fonctionnel des variants.
+  **2.** On veut travailler sur l'impact fonctionnel des variants, c'est à dire la colonne nommée : `ExonicFunc.refGene`. On souhaite créer un tableau contenant uniquement des variants d'intérêt : 
+
+  **2.1** Créer un vecteur `vec1` contenant uniquement les indices des variants des catégories suivantes pour les 4 échantillons : nonsynonymous SNV, stoploss, stopgain. *Indice `which()`, |*
   
-  **2.1** A partir de la colonne `ExonicFunc.refGene`, comptabilisez le nombre de variants par catégorie __pour l'échantillon Sample1__. *Indice : which() ; ==*
+  **2.2** Créer un vecteur `vec2` contenant uniquement les indices des variants dont le score CADD (`CADD_phred`) est supérieur à 12.37. *Indice `which()`, >*
   
-  **2.2** A partir du résultat de la question précédente, représentez les données sous forme de camembert, encore appelé pie chart (`pie()`). Le rendu de base de cette fonction n'est pas trés joli ... Essayons de l'améliorer
+  **2.3** Créer un vecteur `vec3` contenant les indices communs entre la question 6.1 et 6.2 *Indice `intersect()`*
   
-  **2.3**
-
-> * triez le résultat de la question 2.1 (`sort()`)
-> * dans les arguments de `pie`, supprimez les bords du camembert, changez les couleurs à l'aide du package RColorBrewer Pour rappel, il faut a) charger ce package, b) définir un vecteur de couleurs tel que : 
-
-```
-couleurs = brewer.pal(<NombreCouleursDeVotreChoix>, "<NomPaletteDeVotreChoix>")
-```
-
-> * les tranches de certaines catégories sont si fines, que l'on a du mal à distinguer les noms. Il vaudrait peut-être mieux afficher une légende à côté de la figure. Pour cela, supprimer les labels dans la fonction `pie`, puis ajoutez une légende avec la commande suivante : 
-
-```
-legend(0.9,0.9, legend=names(<NomObjet>), fill =brewer.pal(7, "<VotreCouleur>"), cex=0.8)
-```
-
-> * le camembert parait trop petit comparé à la légende ? Nous pouvons diminuer les marges de la figure avec la commande suivante : `par(mar=c(1,1,1,1))`. Pour résumer, dans l'odre, diminuer les marges de la figure, plotter le pie chart, plotter la légende.
-
-
-```{r exo1, echo=TRUE,eval=TRUE, message=FALSE}
-library(RColorBrewer)
-data = read.table("exo1/VariantsTable.csv", sep="\t", header=TRUE)
-datared = data[which(data$SampleID == "Sample1"),]
-exonic = table(datared$ExonicFunc.refGene)
-pie(exonic)
-
-exonicsort = sort(exonic)
-par(mar=c(1,1,1,1))
-couleurs = brewer.pal(7, "Set1")
-pie(exonicsort, border=FALSE, col=couleurs, labels=NA)
-legend(0.9,0.9, legend=names(exonicsort), fill =brewer.pal(7, "Set1"), cex=0.8)
-```
-
-  **3** On souhaite créer un tableau contenant uniquement des variants d'intérêt : 
-
-  **3.1** Créer un vecteur `vec1` contenant uniquement les indices des variants des catégories suivantes pour les 4 échantillons : nonsynonymous SNV, stoploss, stopgain. *Indice `which()`*
+  **2.4** Créer un nouveau tableau `tab` contenant uniquement les variants nonsynonymous SNV, stoploss, stopgain, dont le CADD_phred score est > 12.37. Vous pouvez visualiser ce tableau dans RStudio avec `View(tab)`.
   
-  **3.2** Créer un vecteur `vec2` contenant uniquement les indices des variants dont le score CADD (`CADD_phred`) est supérieur à 12.37. *Indice `which()`*
+  **2.5** Ecrire ce nouveau tableau sur votre ordinateur grâce à la fonction `write.table`.
   
-  **3.3** Créer un vecteur `vec3` contenant les indices communs entre la question 6.1 et 6.2 *Indice `intersect()`*
-  
-  **3.4** Créer un nouveau tableau `tab` contenant uniquement les variants nonsynonymous SNV, stoploss, stopgain, dont le CADD_phred score est > 12.37. Vous pouvez visualiser ce tableau dans RStudio avec `View(tab)`.
-  
-  **3.5** Ecrire ce nouveau tableau sur votre ordinateur grâce à la fonction `write.table`.
-  
-```{r exo3Q6, echo=TRUE, eval=TRUE, message=FALSE}
+```{r exo3Q2, echo=TRUE, eval=TRUE, message=FALSE}
+data = read.table("TP3_data/exo1/VariantsTable.csv", sep="\t", header=TRUE)
+
 vec1 = which(data$ExonicFunc.refGene == "nonsynonymous SNV" | data$ExonicFunc.refGene == "stopgain" | data$ExonicFunc.refGene == "stoploss")
 vec2 = which(data$CADD_phred > 12.37)
 vec3 = intersect(vec1, vec2)
 tab = data[vec3,]
-write.table(tab, file="exo1/outputTable.txt", sep="t", quote=FALSE, row.names=FALSE)
+write.table(tab, file="TP3_data/exo1/outputTable.txt", sep="t", quote=FALSE, row.names=FALSE)
 ```
 
 
@@ -97,7 +61,7 @@ write.table(tab, file="exo1/outputTable.txt", sep="t", quote=FALSE, row.names=FA
 Le fichier `counts_normalized.txt` contient les données d'expression, issues d'une expérience de RNASeq. Il y a 17 échantillons de tumeurs du sein de 3 types, HER2 positif (HER2), triple négatif (TNBC), non triple négatif (Non-TNBC), et 3 échantillons de sein normal (NBS). Ces données correspondent à une table de comptages avec en ligne les gènes et en colonnes les échantillons. Ci-dessous un aperçu du tableau : 
 
 ```{r exo2, echo=TRUE, eval=TRUE, message=FALSE}
-count = read.table("exo2/counts_normalized.txt", sep="\t", header=TRUE, row.names=1)
+count = read.table("TP3_data/exo2/counts_normalized.txt", sep="\t", header=TRUE, row.names=1)
 knitr::kable(count[1:5,1:4])
 ```
 
@@ -111,10 +75,10 @@ Pour cet exercice nous aurons besoin du package pheatmap. Commencez par installe
 countLog2 = log2(count)
 ```
   
-  **3.** Les lignes de commandes ci-dessous permettent de réaliser un t-test entre les condition HER2 et NBS, de corriger les pvalues issues de ce test, puis de sélectionner les gènes dérégulés (pvalue <= 0.05 et -2 < fold-change >2). Executez-les.
+  **3.** Les lignes de commandes ci-dessous permettent de réaliser un t-test entre les condition HER2 et NBS, de corriger les pvalues issues de ce test, puis de sélectionner les gènes dérégulés (pvalue <= 0.05 et -2 < fold-change >2). Executez-les (ceci prend un peu de temps)
   
 ```{r exo2Q3, echo=TRUE, eval=TRUE, message=FALSE, cache=TRUE}
-annot = read.delim("exo2/annot_sample.txt")
+annot = read.delim("TP3_data/exo2/annot_sample.txt")
 
 #création d'une fonction qui calcule la moyenne par groupe
 computeMean = function( condition, count, label.grp){
@@ -154,11 +118,10 @@ countRed = countLog2[idx,c(idxHER2, idxNBS)]
 ```
 
   
-  **4.** Représentez à l'aide de la fonction `pheatmap` une carte de chaleur des mesures d'expression de la matrice `countLog2`, __uniquement__ pour les gènes dérégulés (les indices des gènes dérégulés correspondent à l'objet `idx` dans le bloc de code ci-dessus), et __uniquement__ pour les conditions HER2 et NBS. En d'autres termes, créez une nouvelle matrice réduite sur les gènes dérégulés et sur les conditions HER2 et NBS. Une fois cette matrice créée, exécutez la fonction `pheatmap` dessus avec l'option __`scale='row'`__.
+  **4.** Représentez à l'aide de la fonction `pheatmap` une carte de chaleur des mesures d'expression de la matrice `countLog2`, __uniquement__ pour les gènes dérégulés entre les conditions HER2 et NBS. En d'autres termes, utilisez la fonction `pheatmap` sur la matrice `countRed` du bloc de code ci-dessus. Utilisee l'option __`scale='row'`__.
   
 ```{r exo2Q4, echo=TRUE, eval=TRUE, message=FALSE}
 library(pheatmap)
-counRed = countLog2[idx, c(idxHER2, idxNBS)]
 pheatmap(countRed, show_colnames = TRUE, show_rownames = FALSE, scale='row')
 ```  
 

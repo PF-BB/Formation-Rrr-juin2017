@@ -1,0 +1,35 @@
+GitHub permet d'héberger gratuitement un site web. 
+Nous en avons fait un pour le TP, au format Sphinx (https://daler.github.io/sphinxdoc-test/includeme.html)
+
+L'idée est d'avoir une branch gh-pages sur le repo Github en plus de la branche master, qui contiendra les fichiers html.
+
+La manière certainement pas optimale, mais qui fonction ;) est la suivante :(supprimer brancg gh-page set la reconstruire) :  
+
+cd gh-pages/html
+git checkout master
+git branch -D gh-pages
+git push origin --delete gh-pages
+cd ..
+rm -rf html/
+git clone https://github.com/PF-BB/Formation-Rrr-juin2017.git html
+cd html
+git branch gh-pages
+git symbolic-ref HEAD refs/heads/gh-pages  # auto-switches branches to gh-pages
+rm .git/index
+git clean -fdx
+git branch
+
+cd ../../docs/
+
+make html 
+
+cd ../gh-pages/html
+touch .nojekyll
+git add .nojekyll
+git commit -m "added .nojekyll"
+touch .gitignore
+git add .gitignore
+git commit -m "added .gitignore"
+git add .
+git commit -m "rebuild docs"
+git push origin gh-pages
